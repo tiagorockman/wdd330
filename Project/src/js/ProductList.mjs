@@ -34,4 +34,12 @@ export default class ProductList {
 
   }
 
+   async filterProducts(query) {
+    const list = await this.dataSource.getData();
+        const filteredProducts = list.filter(product =>
+            product.Name.toLowerCase().includes(query)
+        );
+    renderListWithTemplate(productCardTemplate, this.listElement, filteredProducts, "afterbegin", true);
+    }
+
 }
