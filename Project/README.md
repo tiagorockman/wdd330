@@ -35,5 +35,5 @@ APIs (Application Programming Interfaces) are a set of rules and protocols that 
 -   [Rapid API](https://rapidapi.com/collection/cool-apis)  Collection of interesting APIs
 -   [mocky](https://designer.mocky.io/)  – Mock up custom APIs
 -   [Free APis](https://dev.to/vyan/7-free-apis-for-your-next-projects-50n3?context=digest)  – dev.to – APIs for your Projects
-
+ 
 
