@@ -17,6 +17,7 @@ const searchInput = document.getElementById("search-input");
 const handleSearch = () => {
      const query = searchInput.value.toLowerCase();
     productList.filterProducts(query);
+    searchInput.value = "";
 }
 
 searchButton.addEventListener("click", handleSearch);

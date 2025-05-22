@@ -37,3 +37,8 @@ APIs (Application Programming Interfaces) are a set of rules and protocols that 
 -   [Free APis](https://dev.to/vyan/7-free-apis-for-your-next-projects-50n3?context=digest)  – dev.to – APIs for your Projects
  
 
+ # Form
+
+ Watch: 🎦[Using FormData Objects Effectively](https://www.youtube.com/watch?v=GWJhE7Licjs) – Steve Griffith
+Read: 📃[FormData](https://javascript.info/formdata) - javascript.info
+
