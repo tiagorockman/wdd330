@@ -21,7 +21,7 @@
 }
 
 body {
-  font-family: var(--font-body);
+  font-family: var(--font-body), sans-serif;
   font-size: var(--font-base);
   color: var(--dark-grey);
 }
@@ -47,7 +47,7 @@ p {
   display: flex;
   font-size: 30px;
   text-align: right;
-  font-family: var(--font-headline);
+  font-family: var(--font-headline), sans-serif;
 }
 
 .logo img {
@@ -168,6 +168,28 @@ button {
   color: var(--dark-grey);
 }
 
+/* Product grid*/
+.product-grid {
+  columns: 4;
+  column-gap: 1rem;
+  list-style-type: none;
+  text-align: center;
+}
+
+.product-grid a {
+  text-decoration: none;
+  color: var(--dark-grey);
+  font-size: var(--small-font);
+}
+
+.product-grid img {
+  width: min(100px, 90%);
+}
+
+.margin {
+  margin: 2rem;
+}
+
 /* Styles for product lists */
 .product-card {
   flex: 1 1 45%;
@@ -191,6 +213,34 @@ button {
   font-size: 1em;
 }
 
+/* Empty Cart message*/
+.cart-empty {
+  font-size: var(--large-font);
+}
+.products .cart-empty {
+  text-align: center;
+}
+
+/*  Cart Total */
+
+.cart-total-container {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+}
+
+.cart-total {
+  text-align: center;
+  color: #d0d0d0;
+  background-color: black;
+  border-radius: 10px;
+  border: 2px solid var(--primary-color);
+  padding: 10px;
+  font-weight: bold;
+  margin: 20px;
+  width: 300px;
+}
 /* End product list card */
 
 .product-detail {
@@ -201,6 +251,31 @@ button {
 
 .product-detail img {
   width: 100%;
+}
+
+.product-card__price {
+  font-size: 1.2rem;
+  margin-top: 10px;
+}
+
+.final-price {
+  font-weight: bold;
+  color: #2a9d8f;
+}
+
+.original-price {
+  text-decoration: line-through;
+  color: #999;
+  margin-left: 10px;
+}
+
+.discount-badge {
+  background-color: #e63946;
+  color: white;
+  padding: 3px 8px;
+  margin-left: 10px;
+  border-radius: 4px;
+  font-size: 0.9rem;
 }
 
 /* Start cart list card styles */
@@ -241,16 +316,16 @@ button {
   grid-column: 3;
 }
 
-.search-container{
-    display: flex;
-    padding: 10px;
-    margin-left: 45px;
+.search-container {
+  display: flex;
+  padding: 10px;
+  margin-left: 45px;
 }
 
-#search-button{
-      margin-left: 10px;
+#search-button {
+  margin-left: 10px;
 }
-#search-input{
+#search-input {
   width: 35%;
   padding: 10px;
 }
@@ -274,4 +349,5 @@ button {
 footer {
   font-size: var(--small-font);
   padding: 1em;
+  text-align: center;
 }

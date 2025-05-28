@@ -1,45 +1,40 @@
 import { renderListWithTemplate } from "./utils.mjs";
-
 function productCardTemplate(product) {
   return `
     <li class="product-card">
-      <a href="product_pages/?products=${product.Id}">
-        <img src="${product.Image}" alt="${product.Name}">
+      <a href="/product_pages/?product=${product.Id}">
+        <img src="${product.Images.PrimarySmall}" alt="${product.Name}">
         <h2>${product.Brand.Name}</h2>
         <h3>${product.Name}</h3>
         <p class="product-card__price">$${product.FinalPrice}</p>
       </a>
     </li>
-    `;
+  `;
 }
 
 export default class ProductList {
-  constructor(category, dataSource, listElement) {
-    this.category = category;
-    this.dataSource = dataSource;
-    this.listElement = listElement;
-  }
+  
+    constructor(category, dataSource, listElement) {
+        this.category = category;
+        this.dataSource = dataSource;
+        this.listElement = listElement;
+    }
 
-  async init() {
-    const list = await this.dataSource.getData();
-    this.renderList(list);
-  }
+    async init() {
+        const list =  await this.dataSource.getData();
+        this.renderList(list);
+        document.querySelector(".title").textContent = this.category;
+    }
 
-  renderList(list) {
-    // const htmlStrings = list.map(productCardTemplate);
-    // this.listElement.insertAdjacentHTML("afterbegin", htmlStrings.join(""));
+    renderList(list) {
+        renderListWithTemplate(productCardTemplate, this.listElement, list);
+    }
 
-    // apply use new utility function instead of the commented code above
-    renderListWithTemplate(productCardTemplate, this.listElement, list);
-
-  }
-
-   async filterProducts(query) {
-    const list = await this.dataSource.getData();
+    async filterProducts(query){
+        const list = await this.dataSource.getData();
         const filteredProducts = list.filter(product =>
             product.Name.toLowerCase().includes(query)
         );
-    renderListWithTemplate(productCardTemplate, this.listElement, filteredProducts, "afterbegin", true);
+        renderListWithTemplate(productCardTemplate, this.listElement, filteredProducts, "afterbegin", true);
     }
-
 }
