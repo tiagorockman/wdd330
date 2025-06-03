@@ -1,16 +1,23 @@
 import { renderListWithTemplate } from "./utils.mjs";
 function productCardTemplate(product) {
+  const discount = product.SuggestedRetailPrice - product.FinalPrice;
+  const hasDiscount = discount > 0;
+
   return `
     <li class="product-card">
       <a href="/product_pages/?product=${product.Id}">
         <img src="${product.Images.PrimarySmall}" alt="${product.Name}">
+        ${hasDiscount ? `<span class="discount-badge">Save $${discount.toFixed(2)}</span>` : ""}
         <h2>${product.Brand.Name}</h2>
         <h3>${product.Name}</h3>
-        <p class="product-card__price">$${product.FinalPrice}</p>
+        <p class="product-card__price">
+          $${product.FinalPrice.toFixed(2)}
+        </p>
       </a>
     </li>
   `;
 }
+
 
 export default class ProductList {
   

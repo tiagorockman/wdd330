@@ -1,16 +1,14 @@
-//
+import { cartCounter, getLocalStorage, setLocalStorage } from "./utils.mjs";
 
-import { getLocalStorage, setLocalStorage } from "./utils.mjs";
-
-let cartItemsTotal = document.querySelector(".cart-total");
+let totalContainer = document.querySelector(".cart-total-container");
 
 function cartItemTemplate(item) {
   return `
     <li class="cart-card divider">
-      <a href="#" class="cart-card__image">
-        <img src="${item.Image}" alt="${item.Name}" />
+      <a href="/product_pages/?product=${item.Id}" class="cart-card__image">
+        <img src="${item.Images?.PrimarySmall || "default.jpg"}" alt="${item.Name}" />
       </a>
-      <a href="#">
+      <a href="/product_pages/?product=${item.Id}">
         <h2 class="card__name">${item.Name}</h2>
       </a>
       <p class="cart-card__color">${item.Colors[0]?.ColorName ?? ""}</p>
@@ -66,6 +64,7 @@ function removeCartItem(e) {
   // update the total price after removal
   getTotal();
   displayEmptyCartMessage();
+  cartCounter();
 }
 
 // Update renderCartContents to call attachRemoveListeners
@@ -87,6 +86,7 @@ function displayEmptyCartMessage() {
   const cartItems = getLocalStorage("so-cart") || [];
   if (cartItems.length === 0) {
     document.querySelector(".cart-empty").textContent = "Your cart is empty!";
+    totalContainer.style.display = "none";
   }
 }
 

@@ -44,6 +44,16 @@ export function renderWithTemplate(template, parentElement, data, callback) {
   }
 }
 
+// Function to count the number of items in the cart
+export function cartCounter() {
+  const counter = document.getElementById("cart-total-counter");
+  if(!counter) {
+    console.warn("cart-total-counter element not found in the DOM");
+    return;
+  }
+  const cartItems = getLocalStorage("so-cart") || [];
+  counter.textContent = cartItems.length.toString();
+}
 export async function loadTemplate(path) {
   const response = await fetch(path);
   if (response.ok) {
@@ -60,6 +70,7 @@ export async function loadHeaderFooter() {
 
   renderWithTemplate(headerHTML, headerElement, null, headerSetup);
   renderWithTemplate(footerHTML, footerElement);
+  cartCounter();
 }
 
 // Example function to attach event listeners
@@ -76,4 +87,8 @@ function headerSetup() {
   // Example: highlight current nav link, or add dropdown behavior
 }
 
-
+// // Updates the counter while loading the page
+// document.addEventListener("DOMContentLoaded", cartCounter);
+//
+// // Identifies any changes in `LocalStorage` from any window
+// window.addEventListener("storage", cartCounter);
