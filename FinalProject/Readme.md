@@ -16,7 +16,7 @@ Includes Google/Facebook login integration.
 
 -   ✅ [Google Firebase Authentication API](https://firebase.google.com/products/auth) – for login with Google and Facebook
     
--   ✅ [Razorpay/Stripe/PayPal API](https://stripe.com/docs/api) – to manage paid user access
+-   ✅ [Razorpay/Stripe/PayPal API/Mercado Pago] (https://stripe.com/docs/api) (https://developer.paypal.com/docs/api/payments/v2/ ) (https://razorpay.com/pricing/) (https://developer.paypal.com/api/rest/) (https://www.mercadopago.com.br/developers/en/reference) – to manage paid user access
     
 -   ✅ [GeoDB Universities API](https://rapidapi.com/wirefreethought/api/geodb-cities/) or [Universities API](https://universities.hipolabs.com/) – to get basic university data
     
