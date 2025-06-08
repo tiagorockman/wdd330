@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniFinder - Find Your Perfect US University</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="../styles/base.css">
+    <script src="scripts/base.js"></script>
+    <script src="../scripts/search.js"></script>
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="#" class="navbar-brand" onclick="navigateTo('home')">
+                <i class="fas fa-graduation-cap"></i>
+                <span>UniFinder</span>
+            </a>
+            <div class="flex items-center space-x-4">
+                <button class="btn btn-primary" onclick="navigateTo('login')">
+                    Sign In
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Search Page -->
+    <div id="search-page">
+        <div class="min-h-screen bg-gray-50">
+            <div class="main-layout">
+                <!-- Filters Sidebar -->
+                <div class="filters-sidebar">
+                    <h3 class="card-title flex items-center mb-4">
+                        <i class="fas fa-sliders-h" style="margin-right: 0.5rem;"></i>
+                        Filters
+                    </h3>
+                    <div class="space-y-6">
+                        <div>
+                            <label class="form-label">University Type</label>
+                            <select class="select" id="type-filter" onchange="applyFilters()">
+                                <option value="">All Types</option>
+                                <option value="Public">Public</option>
+                                <option value="Private">Private</option>
+                            </select>
+                        </div>
+
+                        <div>
+                            <label class="form-label">Tuition Range</label>
+                            <select class="select" id="tuition-filter" onchange="applyFilters()">
+                                <option value="">Any Range</option>
+                                <option value="under30k">Under $30,000</option>
+                                <option value="30k-50k">$30,000 - $50,000</option>
+                                <option value="over50k">Over $50,000</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-4">
+                            <div class="flex items-center">
+                                <input type="checkbox" class="checkbox" id="cpt-filter" onchange="applyFilters()">
+                                <label class="text-sm">CPT Day One Available</label>
+                            </div>
+
+                            <div class="flex items-center">
+                                <input type="checkbox" class="checkbox" id="mpower-filter" onchange="applyFilters()">
+                                <label class="text-sm">MPOWER Eligible</label>
+                            </div>
+                        </div>
+
+                        <button class="btn btn-primary w-full h-10" id="apply-filters-button" onclick="applyFilters()">
+                            <i class="fas fa-filter" style="margin-right: 0.5rem;"></i>
+                            Apply Filters
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Main Content -->
+                <div>
+                    <!-- Search Bar -->
+                    <div class="card mb-6">
+                        <div class="card-content">
+                            <div class="flex gap-4">
+                                <input type="text" placeholder="Search universities, programs, or locations..."
+                                    class="input input-lg flex-1" id="search-input"
+                                    onkeypress="handleEnterKey(event, searchUniversities)" />
+                                <button class="btn btn-primary btn-lg" id="search-button"
+                                    onclick="searchUniversities()">
+                                    <i class="fas fa-search" style="margin-right: 0.5rem;"></i>
+                                    Search
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Results Header -->
+                    <div class="mb-4">
+                        <h2 class="text-xl font-semibold text-gray-900" id="results-count">
+                            Found 4 Universities
+                        </h2>
+                        <p class="text-gray-600">Showing results for international students</p>
+                    </div>
+
+                    <!-- Universities Grid -->
+                    <div class="universities-grid" id="universities-container">
+                        <!-- Universities will be populated here -->
+                    </div>
+
+                    <!-- No Results -->
+                    <div id="no-results" class="text-center py-12 hidden">
+                        <p class="text-xl text-gray-500 mb-2">No universities found</p>
+                        <p class="text-gray-400">Try adjusting your search criteria</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- University Modal -->
+    <div id="university-modal" class="modal-overlay hidden" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modal-title">University Name</h2>
+                <button onclick="closeModal()"
+                    style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                        class="lucide lucide-x h-4 w-4" data-lov-id="src/components/ui/dialog.tsx:46:8"
+                        data-lov-name="X" data-component-path="src/components/ui/dialog.tsx" data-component-line="46"
+                        data-component-file="dialog.tsx" data-component-name="X"
+                        data-component-content="%7B%22className%22%3A%22h-4%20w-4%22%7D">
+                        <path d="M18 6 6 18"></path>
+                        <path d="m6 6 12 12"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div id="modal-body">
+                <!-- Modal content will be populated here -->
+            </div>
+        </div>
+    </div>
+</body>

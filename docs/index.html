@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniFinder - Find Your Perfect US University</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles/base.css">
+    <script src="scripts/base.js" ></script>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-content">
+            <a href="#" class="navbar-brand" onclick="navigateTo('home')">
+                <i class="fas fa-graduation-cap"></i>
+                <span>UniFinder</span>
+            </a>
+            <div class="flex items-center space-x-4">
+                <button class="btn btn-primary" onclick="navigateTo('login')">
+                    Sign In
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Home Page -->
+    <div id="home-page">
+        <div class="min-h-screen bg-gradient">
+            <div class="container py-16">
+                <div class="text-center">
+                    <div class="mb-6">
+                        <i class="fas fa-graduation-cap text-blue-600" style="font-size: 4rem;"></i>
+                    </div>
+                    
+                    <h1 class="text-4xl font-bold text-gray-900 mb-6">
+                        Find Your Perfect
+                        <span class="text-blue-600"> US University</span>
+                    </h1>
+                    
+                    <p class="text-xl text-gray-600 mb-8">
+                        Discover universities tailored for international students. Filter by tuition costs, 
+                        English requirements, CPT Day One availability, and more to find your ideal match.
+                    </p>
+                    
+                    <!-- Search Bar -->
+                    <div class="search-section">
+                        <input 
+                            type="text" 
+                            placeholder="Search universities, programs, or locations..."
+                            class="input input-lg"
+                            id="home-search"
+                            onkeypress="handleEnterKey(event, findUniversities)"
+                        />
+                        <button class="btn btn-primary btn-lg" onclick="findUniversities()" >
+                            <i class="fas fa-search" style="margin-right: 0.5rem;"></i>
+                            Find Universities
+                        </button>
+                    </div>
+                    
+                    <!-- Features -->
+                    <div class="grid md-grid-cols-3 gap-8 mt-16">
+                        <div class="feature-card">
+                            <i class="fas fa-dollar-sign"></i>
+                            <h3>Tuition Analysis</h3>
+                            <p>Compare costs and find affordable options</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-book-open"></i>
+                            <h3>Program Matching</h3>
+                            <p>Find universities with your desired programs</p>
+                        </div>
+                        <div class="feature-card">
+                            <i class="fas fa-globe"></i>
+                            <h3>International Support</h3>
+                            <p>Special focus on international student needs</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Page -->
+    <div id="login-page" class="page hidden">
+        <div class="login-container">
+            <!-- Logo Header -->
+            <div style="position: absolute; top: 1.5rem; left: 1.5rem;">
+                <a href="#" class="navbar-brand" onclick="navigateTo('home')">
+                    <i class="fas fa-graduation-cap"></i>
+                    <span>UniFinder</span>
+                </a>
+            </div>
+
+            <div class="login-card">
+                <div class="login-header">
+                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Welcome Back</h2>
+                    <p class="text-gray-600">Sign in to continue your university search</p>
+                </div>
+                
+                <div class="login-content space-y-6">
+                    <form onsubmit="handleLogin(event)" class="space-y-4">
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" placeholder="Enter your email" class="input" required />
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Password</label>
+                            <input type="password" placeholder="Enter your password" class="input" required />
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-full" style="height: 2.75rem;">
+                            Sign In
+                        </button>
+                    </form>
+                    
+                    <div class="text-center">
+                        <a href="#" class="text-sm text-blue-600">Forgot your password?</a>
+                    </div>
+                    
+                    <div class="separator">
+                        <span>or</span>
+                    </div>
+                    
+                    <button onclick="navigateTo('search')" class="btn btn-outline w-full" style="height: 2.75rem;">
+                        <i class="fas fa-envelope" style="margin-right: 0.5rem;"></i>
+                        Continue with Google
+                    </button>
+                    
+                    <div class="text-center text-sm text-gray-600">
+                        Don't have an account? 
+                        <a href="#" class="text-blue-600 font-semibold">Sign up here</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- 404 Page -->
+    <div id="not-found-page" class="page hidden">
+        <div class="min-h-screen flex items-center justify-center bg-gray-100">
+            <div class="text-center">
+                <h1 class="text-4xl font-bold mb-4">404</h1>
+                <p class="text-xl text-gray-600 mb-4">Oops! Page not found</p>
+                <a href="#" onclick="navigateTo('home')" class="text-blue-600 hover:text-blue-800">Return to Home</a>
+            </div>
+        </div>
+    </div>
+</body>
