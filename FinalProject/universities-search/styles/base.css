@@ -12,14 +12,19 @@
         }
 
         /* Utility Classes */
-        .h-4{
-            height: 30px;
-        }
+        .h-4{ height: 30px; }
+        .h-5{ height: 1.25rem}
         .hidden { display: none !important; }
         .container { max-width: 1280px; margin: 0 auto; padding: 0 1rem; }
         .flex { display: flex; }
+        .flex-wrap { flex-wrap: wrap;}
         .flex-col { flex-direction: column; }
+        .flex-1 { flex: 1 1 0%}
         .items-center { align-items: center; }
+        .inline-flex { display: inline-flex;}
+        .flex-nowrap {flex-wrap: nowrap;}
+        .content-center { justify-content: center;}
+        .align-icenter {  align-items: center; }   
         .justify-between { justify-content: space-between; }
         .justify-center { justify-content: center; }
         .space-x-2 > * + * { margin-left: 0.5rem; }
@@ -62,6 +67,7 @@
         .shadow-lg { box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -2px rgb(0 0 0 / 0.05); }
         .border { border: 1px solid #e5e7eb; }
         .grid { display: grid; }
+        .gap-2 { gap: 0.5rem }
         .gap-4 { gap: 1rem; }
         .gap-6 { gap: 1.5rem; }
         .gap-8 { gap: 2rem; }
@@ -88,8 +94,8 @@
         .bg-gray-50 { background-color: #f9fafb; }
         .bg-green-100 { background-color: #dcfce7; }
         .bg-blue-100 { background-color: #dbeafe; }
-        .border-gray-100 { border-color: #f3f4f6; }
-        .border-gray-200 { border-color: #e5e7eb; }
+        .border-gray-100 { border-color: #f3f4f6e5; }
+        .border-gray-200 { border-color: #e5e7eba9; }
 		/* Navbar */
         .navbar {
             background-color: white;
@@ -286,6 +292,8 @@
         }
 
         .modal-header {
+            display: flex;
+            justify-content: space-between;
             margin-bottom: 1.5rem;
         }
 

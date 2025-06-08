@@ -238,7 +238,7 @@ function createUniversityCard(university) {
       <div class="flex items-start justify-between mb-4">
         <div class="flex-1">
           <h3 class="font-bold text-lg text-gray-900 mb-2">${university.name}</h3>
-          <div class="flex items-center text-gray-600 mb-2">
+          <div class="flex items-center text-gray-600 mb-2 gap-2">
             <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
@@ -260,7 +260,7 @@ function createUniversityCard(university) {
       
       <div class="space-y-3 mb-4">
         <div class="flex items-center justify-between">
-          <div class="flex items-center text-gray-600">
+          <div class="flex items-center text-gray-600 gap-2">
             <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1"></path>
             </svg>
@@ -269,8 +269,8 @@ function createUniversityCard(university) {
           <span class="font-semibold text-gray-900">${university.tuition}</span>
         </div>
         
-        <div class="flex items-center justify-between">
-          <div class="flex items-center text-gray-600">
+        <div class="flex items-center justify-between gap-2">
+          <div class="flex items-center text-gray-600 ">
             <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
             </svg>
@@ -280,7 +280,7 @@ function createUniversityCard(university) {
         </div>
         
         <div class="flex items-center justify-between">
-          <div class="flex items-center text-gray-600">
+          <div class="flex items-center text-gray-600 gap-2">
             <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path d="M12 14l9-5-9-5-9 5 9 5z"></path>
               <path d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path>
@@ -292,7 +292,7 @@ function createUniversityCard(university) {
         </div>
       </div>
       
-      <button class="w-full h-10 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition-colors duration-200 btn" 
+      <button class="w-full h-10 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition-colors duration-200 btn gap-2 " 
               onclick="openUniversityModal(${university.id})">
         View Details
       </button>
@@ -306,5 +306,150 @@ function updateResultsCount() {
   const countElement = document.querySelector('#results-count');
   if (countElement) {
     countElement.textContent = `Found ${appState.filteredUniversities.length} Universities`;
+  }
+}
+
+// Modal functionality
+function openUniversityModal(universityId) {
+  const university = mockUniversities.find(u => u.id === universityId);
+  if (!university) return;
+
+  appState.selectedUniversity = university;
+  
+  const modal = document.querySelector('#university-modal');
+  const overlay = document.getElementsByClassName('modal-overlay');
+  
+  if (modal && overlay) {
+    // Populate modal content
+    populateModalContent(university);
+    
+    // Show modal
+    modal.classList.remove('hidden');
+    //overlay.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+function closeUniversityModal() {
+  const modal = document.querySelector('#university-modal');
+  const overlay = document.getElementsByClassName('modal-overlay');
+  
+  if (modal && overlay) {
+    modal.classList.add('hidden');
+    overlay.classList.add('hidden');
+    document.body.style.overflow = 'auto';
+    appState.selectedUniversity = null;
+  }
+}
+
+function populateModalContent(university) {
+  const modalTitle = document.querySelector('#modal-title');
+  const modalContent = document.querySelector('#modal-body');
+  
+  if (modalTitle) {
+    modalTitle.textContent = university.name;
+  }
+  
+  if (modalContent) {
+    modalContent.innerHTML = `
+      <div class="space-y-6">
+        <!-- Basic Info -->
+        <div class="grid md-grid-cols-2 gap-6">
+          <div class="space-y-4">
+            <div class="flex items-center text-gray-600 gap-2">
+              <svg class="h-5 w-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
+              </svg>
+              <span>${university.location}</span>
+            </div>
+            
+            <div class="flex flex-wrap gap-2">
+              <span class="px-2 py-1 bg-gray-100 text-gray-800 text-sm rounded">${university.type}</span>
+              <span class="px-2 py-1 bg-blue-100 text-blue-800 text-sm rounded">Ranking #${university.ranking}</span>
+              ${university.cpt_day_one ? '<span class="px-2 py-1 bg-green-100 text-green-800 text-sm rounded">CPT Day 1 Available</span>' : ''}
+              ${university.mpower_eligible ? '<span class="px-2 py-1 bg-purple-100 text-purple-800 text-sm rounded">MPOWER Eligible</span>' : ''}
+            </div>
+          </div>
+          
+          <div class="bg-gray-50 p-4 rounded-lg">
+            <h4 class="font-semibold text-gray-900 mb-2">Quick Stats</h4>
+            <div class="space-y-2">
+              <div class="flex justify-between">
+                <span class="text-gray-600">Annual Tuition:</span>
+                <span class="font-semibold">${university.tuition}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">Acceptance Rate:</span>
+                <span class="font-semibold">${university.acceptance_rate}</span>
+              </div>
+              <div class="flex justify-between">
+                <span class="text-gray-600">Programs Available:</span>
+                <span class="font-semibold">${university.programs.length}+</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <hr class="border-gray-200">
+        
+        <!-- International Student Features -->
+        <div>
+          <h4 class="font-semibold text-gray-900 mb-4 text-lg">International Student Benefits</h4>
+          <div class="grid md-grid-cols-2 gap-4">
+            <div class="flex items-center space-x-3">
+              ${university.cpt_day_one ? 
+                '<svg class="h-5 w-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>' :
+                '<svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>'
+              }
+              <span class="${university.cpt_day_one ? 'text-gray-900' : 'text-gray-500'}">CPT from Day One</span>
+            </div>
+            
+            <div class="flex items-center space-x-3">
+              ${university.mpower_eligible ? 
+                '<svg class="h-5 w-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>' :
+                '<svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>'
+              }
+              <span class="${university.mpower_eligible ? 'text-gray-900' : 'text-gray-500'}">MPOWER Financing</span>
+            </div>
+            
+            <div class="flex items-center space-x-3">
+              <svg class="h-5 w-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <span class="text-gray-900">English Proficiency Support</span>
+            </div>
+            
+            <div class="flex items-center space-x-3">
+              <svg class="h-5 w-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+              <span class="text-gray-900">International Student Services</span>
+            </div>
+          </div>
+        </div>
+        
+        <hr class="border-gray-200">
+        
+        <!-- Available Programs -->
+        <div>
+          <h4 class="font-semibold text-gray-900 mb-4 text-lg">Popular Programs</h4>
+          <div class="flex flex-wrap gap-2">
+            ${university.programs.map(program => `<span class="px-3 py-1 border border-gray-300 text-gray-700 text-sm rounded">${program}</span>`).join('')}
+          </div>
+        </div>
+        
+        <hr class="border-gray-200">
+        
+        <!-- Action Buttons -->
+        <div class="flex space-x-4 pt-4">
+          <button class="flex-1  flex flex-nowrap content-center align-icenter bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded transition-colors duration-200">
+            <svg class="h-4 w-4 mr-2 inline" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+            </svg>
+            Visit Official Website
+          </button>
+          <button class="flex-1 border border-gray-300 hover:bg-gray-50 text-gray-700 font-medium py-2 px-4 rounded transition-colors duration-200">
+            Add to Favorites
+          </button>
+        </div>
+      </div>
+    `;
   }
 }
