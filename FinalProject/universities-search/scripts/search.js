@@ -154,7 +154,7 @@ function createElement(tag, className = '', innerHTML = '') {
 }
 
 function performSearch() {
-  const searchInput = document.querySelector('#main-search-input');
+  const searchInput = document.querySelector('#search-input');
   if (searchInput) {
     appState.searchQuery = searchInput.value;
   }
@@ -206,6 +206,10 @@ function performSearch() {
   appState.filteredUniversities = filtered;
   renderUniversities();
   updateResultsCount();
+}
+
+function searchUniversities(){
+  performSearch();
 }
 
 function renderUniversities() {
@@ -336,7 +340,7 @@ function closeUniversityModal() {
   
   if (modal && overlay) {
     modal.classList.add('hidden');
-    overlay.classList.add('hidden');
+   // overlay.classList.add('hidden');
     document.body.style.overflow = 'auto';
     appState.selectedUniversity = null;
   }
