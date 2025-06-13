@@ -11,6 +11,10 @@ const data = JSON.parse(
   fs.readFileSync(path.join(__dirname, '../data/us-colleges-and-universities.json'), 'utf8')
 );
 
+const datadomain = JSON.parse(
+  fs.readFileSync(path.join(__dirname, '../data/gerado-college-domain.json'), 'utf8')
+);
+
 db.serialize(() => {
   db.run(`
     CREATE TABLE colleges (
@@ -117,6 +121,27 @@ db.serialize(() => {
   });
 
   stmt.finalize();
+
+  db.run(`
+  CREATE TABLE college_domains(
+      objectid VARCHAR(255),
+      mpowerfinance TINYINT DEFAULT 0,
+      CPT TINYINT DEFAULT 0
+      )`
+    );
+
+    stmt = db.prepare(`
+      INSERT INTO college_domains VALUES (?,?,?)
+      `);
+
+  datadomain.forEach((d) =>{
+      stmt.run([
+        d.objectid,
+        d.mpowerfinance,
+        d.CPT
+      ])
+  });
+
 });
 
 export default db;

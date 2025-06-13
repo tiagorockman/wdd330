@@ -7,9 +7,11 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 
+var queryBase = "SELECT c.*,d.* FROM colleges c LEFT JOIN college_domains d ON c.objectid = d.objectid";
+
 // Lista tudo
 app.get('/api/colleges', (req, res) => {
-  db.all('SELECT * FROM colleges LIMIT 100', [], (err, rows) => {
+  db.all(`${queryBase} LIMIT 10`, [], (err, rows) => {
     if (err) return res.status(500).json({ error: err.message });
     res.json(rows);
   });
@@ -19,7 +21,7 @@ app.get('/api/colleges', (req, res) => {
 app.get('/api/colleges/search', (req, res) => {
   const name = req.query.name || '';
   db.all(
-    'SELECT * FROM colleges WHERE name LIKE ?',
+   `${queryBase} WHERE c.name LIKE ?`,
     [`%${name}%`],
     (err, rows) => {
       if (err) return res.status(500).json({ error: err.message });
