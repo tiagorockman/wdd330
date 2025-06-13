@@ -21,3 +21,8 @@ git clone https://github.com/seu-usuario/college-api.git
 cd college-api
 npm install
 npm start
+```
+## Hosted
+Render
+
+https://college-api-wxz6.onrender.com
