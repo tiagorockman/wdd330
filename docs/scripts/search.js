@@ -1,64 +1,66 @@
 // Mock data for universities
-const mockUniversities = [
-  {
-    id: 1,
-    name: "University of Southern California",
-    location: "Los Angeles, CA",
-    tuition: "$63,468/year",
-    ranking: 25,
-    type: "Private",
-    acceptance_rate: "11%",
-    cpt_day_one: true,
-    mpower_eligible: true,
-    image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
-    programs: ["Computer Science", "Business", "Engineering", "Medicine", "Film"]
-  },
-  {
-    id: 2,
-    name: "Arizona State University",
-    location: "Tempe, AZ",
-    tuition: "$31,200/year",
-    ranking: 117,
-    type: "Public",
-    acceptance_rate: "88%",
-    cpt_day_one: true,
-    mpower_eligible: false,
-    image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
-    programs: ["Business", "Engineering", "Computer Science", "Psychology"]
-  },
-  {
-    id: 3,
-    name: "Northeastern University",
-    location: "Boston, MA",
-    tuition: "$59,100/year",
-    ranking: 49,
-    type: "Private",
-    acceptance_rate: "18%",
-    cpt_day_one: true,
-    mpower_eligible: true,
-    image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d",
-    programs: ["Computer Science", "Business", "Engineering", "Health Sciences"]
-  },
-  {
-    id: 4,
-    name: "University of Illinois Chicago",
-    location: "Chicago, IL",
-    tuition: "$35,000/year",
-    ranking: 82,
-    type: "Public",
-    acceptance_rate: "79%",
-    cpt_day_one: false,
-    mpower_eligible: true,
-    image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6",
-    programs: ["Medicine", "Engineering", "Business", "Public Health"]
-  }
-];
+var universities = [];
+const Url = "https://college-api-wxz6.onrender.com/api";
+//const Url = "http://localhost:3000/api";
+//  [
+//   {
+//     id: 1,
+//     name: "University of Southern California",
+//     location: "Los Angeles, CA",
+//     tuition: "$63,468/year",
+//     ranking: 25,
+//     type: "Private",
+//     acceptance_rate: "11%",
+//     cpt_day_one: true,
+//     mpower_eligible: true,
+//     image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
+//     programs: ["Computer Science", "Business", "Engineering", "Medicine", "Film"]
+//   },
+//   {
+//     id: 2,
+//     name: "Arizona State University",
+//     location: "Tempe, AZ",
+//     tuition: "$31,200/year",
+//     ranking: 117,
+//     type: "Public",
+//     acceptance_rate: "88%",
+//     cpt_day_one: true,
+//     mpower_eligible: false,
+//     image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
+//     programs: ["Business", "Engineering", "Computer Science", "Psychology"]
+//   },
+//   {
+//     id: 3,
+//     name: "Northeastern University",
+//     location: "Boston, MA",
+//     tuition: "$59,100/year",
+//     ranking: 49,
+//     type: "Private",
+//     acceptance_rate: "18%",
+//     cpt_day_one: true,
+//     mpower_eligible: true,
+//     image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d",
+//     programs: ["Computer Science", "Business", "Engineering", "Health Sciences"]
+//   },
+//   {
+//     id: 4,
+//     name: "University of Illinois Chicago",
+//     location: "Chicago, IL",
+//     tuition: "$35,000/year",
+//     ranking: 82,
+//     type: "Public",
+//     acceptance_rate: "79%",
+//     cpt_day_one: false,
+//     mpower_eligible: true,
+//     image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6",
+//     programs: ["Medicine", "Engineering", "Business", "Public Health"]
+//   }
+// ];
 
 // Application state
 let appState = {
-  currentPage: 'index',
   searchQuery: '',
-  filteredUniversities: [...mockUniversities],
+  filteredUniversities: [...universities],
   selectedUniversity: null,
   filters: {
     state: '',
@@ -76,11 +78,32 @@ window.onload = () =>{
 }
 
 
-function initializeSearchPage() {
-  setupSearchFunctionality();
-  setupFilters();
-  renderUniversities();
-  updateResultsCount();
+async function initializeSearchPage() {
+  initialLodaData();
+
+}
+
+function initialLodaData(){
+    const path = `${Url}/colleges`;
+    
+    fetch(path).then(response=> {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data =>{
+      universities = data;
+      appState.filteredUniversities = [...universities];
+        setupSearchFunctionality();
+        setupFilters();
+        renderUniversities();
+        updateResultsCount();
+    })
+    .catch(error => {
+        throw new Error(`Could not load ${path}`)
+    })
+  
 }
 
 function setupSearchFunctionality() {
@@ -154,12 +177,12 @@ function createElement(tag, className = '', innerHTML = '') {
 }
 
 function performSearch() {
-  const searchInput = document.querySelector('#main-search-input');
+  const searchInput = document.querySelector('#search-input');
   if (searchInput) {
     appState.searchQuery = searchInput.value;
   }
 
-  let filtered = [...mockUniversities];
+  let filtered = [...universities];
 
   // Apply search query filter
   if (appState.searchQuery.trim()) {
@@ -208,6 +231,10 @@ function performSearch() {
   updateResultsCount();
 }
 
+function searchUniversities(){
+  performSearch();
+}
+
 function renderUniversities() {
   const container = document.querySelector('#universities-container');
   if (!container) return;
@@ -230,6 +257,12 @@ function renderUniversities() {
   });
 }
 
+function capitalizeFirst(string){
+  if (!string) {
+    return "";
+  }
+  return string.toLowerCase().replace(/(^|\s)\w/g, (match) => match.toUpperCase());
+}
 function createUniversityCard(university) {
   const card = createElement('div', 'bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-200');
   
@@ -237,25 +270,25 @@ function createUniversityCard(university) {
     <div class="p-6">
       <div class="flex items-start justify-between mb-4">
         <div class="flex-1">
-          <h3 class="font-bold text-lg text-gray-900 mb-2">${university.name}</h3>
+          <h3 class="font-bold text-lg text-gray-900 mb-2">${capitalizeFirst(university.name)}</h3>
           <div class="flex items-center text-gray-600 mb-2 gap-2">
             <svg class="h-4 w-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
             </svg>
-            <span class="text-sm">${university.location}</span>
+            <span class="text-sm">${capitalizeFirst(university.city)},${university.state}</span>
           </div>
         </div>
         <div class="text-right">
           <div class="text-sm text-gray-500">Ranking</div>
-          <div class="font-bold text-blue-600">#${university.ranking}</div>
+          <div class="font-bold text-blue-600">#${university.ranking ?? "#0"}</div>
         </div>
       </div>
       
       <div class="flex flex-wrap gap-4 mb-4">
-        <span class="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded">${university.type}</span>
-        ${university.cpt_day_one ? '<span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">CPT Day 1</span>' : ''}
-        ${university.mpower_eligible ? '<span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">MPOWER</span>' : ''}
+        <span class="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded">${university.type == 2? "Private" : "Public"}</span>
+        ${university.CPT == null || university.CPT == 0 ?  '' : '<span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">CPT Day 1</span>'}
+        ${university.mpowerfinance == null || university.mpowerfinance == 0 ? '' : '<span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">MPOWER</span>'}
       </div>
       
       <div class="space-y-3 mb-4">
@@ -266,7 +299,7 @@ function createUniversityCard(university) {
             </svg>
             <span class="text-sm">Tuition</span>
           </div>
-          <span class="font-semibold text-gray-900">${university.tuition}</span>
+          <span class="font-semibold text-gray-900">${university.tuition ?? "No information"}</span>
         </div>
         
         <div class="flex items-center justify-between gap-2">
@@ -276,7 +309,7 @@ function createUniversityCard(university) {
             </svg>
             <span class="text-sm">Acceptance</span>
           </div>
-          <span class="font-semibold text-gray-900">${university.acceptance_rate}</span>
+          <span class="font-semibold text-gray-900">${university.hi_offer}</span>
         </div>
         
         <div class="flex items-center justify-between">
@@ -288,12 +321,12 @@ function createUniversityCard(university) {
             </svg>
             <span class="text-sm">Programs</span>
           </div>
-          <span class="font-semibold text-gray-900">${university.programs.length}+</span>
+          <span class="font-semibold text-gray-900">${university.size_set}+</span>
         </div>
       </div>
       
       <button class="w-full h-10 bg-blue-600 hover:bg-blue-700 text-white py-2 px-4 rounded transition-colors duration-200 btn gap-2 " 
-              onclick="openUniversityModal(${university.id})">
+              onclick="openUniversityModal(${university.objectid})">
         View Details
       </button>
     </div>
@@ -311,7 +344,7 @@ function updateResultsCount() {
 
 // Modal functionality
 function openUniversityModal(universityId) {
-  const university = mockUniversities.find(u => u.id === universityId);
+  const university = universities.find(u => u.id === universityId);
   if (!university) return;
 
   appState.selectedUniversity = university;
@@ -336,7 +369,7 @@ function closeUniversityModal() {
   
   if (modal && overlay) {
     modal.classList.add('hidden');
-    overlay.classList.add('hidden');
+   // overlay.classList.add('hidden');
     document.body.style.overflow = 'auto';
     appState.selectedUniversity = null;
   }

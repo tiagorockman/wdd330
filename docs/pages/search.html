@@ -7,7 +7,7 @@
     <title>UniFinder - Find Your Perfect US University</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../styles/base.css">
-    <script src="scripts/base.js"></script>
+    <script src="../scripts/base.js"></script>
     <script src="../scripts/search.js"></script>
 </head>
 
@@ -15,12 +15,12 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="navbar-content">
-            <a href="#" class="navbar-brand" onclick="navigateTo('home')">
+            <a href="#" class="navbar-brand" onclick="navigateToHome()">
                 <i class="fas fa-graduation-cap"></i>
                 <span>UniFinder</span>
             </a>
             <div class="flex items-center space-x-4">
-                <button class="btn btn-primary" onclick="navigateTo('login')">
+                <button class="btn btn-primary" onclick="navigateToLogin()">
                     Sign In
                 </button>
             </div>
@@ -40,7 +40,7 @@
                     <div class="space-y-6">
                         <div>
                             <label class="form-label">University Type</label>
-                            <select class="select" id="type-filter" onchange="applyFilters()">
+                            <select class="select" id="type-filter">
                                 <option value="">All Types</option>
                                 <option value="Public">Public</option>
                                 <option value="Private">Private</option>
@@ -49,7 +49,7 @@
 
                         <div>
                             <label class="form-label">Tuition Range</label>
-                            <select class="select" id="tuition-filter" onchange="applyFilters()">
+                            <select class="select" id="tuition-filter">
                                 <option value="">Any Range</option>
                                 <option value="under30k">Under $30,000</option>
                                 <option value="30k-50k">$30,000 - $50,000</option>
@@ -59,17 +59,17 @@
 
                         <div class="space-y-4">
                             <div class="flex items-center">
-                                <input type="checkbox" class="checkbox" id="cpt-filter" onchange="applyFilters()">
+                                <input type="checkbox" class="checkbox" id="cpt-filter">
                                 <label class="text-sm">CPT Day One Available</label>
                             </div>
 
                             <div class="flex items-center">
-                                <input type="checkbox" class="checkbox" id="mpower-filter" onchange="applyFilters()">
+                                <input type="checkbox" class="checkbox" id="mpower-filter">
                                 <label class="text-sm">MPOWER Eligible</label>
                             </div>
                         </div>
 
-                        <button class="btn btn-primary w-full h-10" id="apply-filters-button" onclick="applyFilters()">
+                        <button class="btn btn-primary w-full h-10" id="apply-filters-button">
                             <i class="fas fa-filter" style="margin-right: 0.5rem;"></i>
                             Apply Filters
                         </button>
@@ -85,7 +85,7 @@
                                 <input type="text" placeholder="Search universities, programs, or locations..."
                                     class="input input-lg flex-1" id="search-input"
                                     onkeypress="handleEnterKey(event, searchUniversities)" />
-                                <button class="btn btn-primary btn-lg" id="search-button"
+                                <button class="btn btn-prihandleEnterKeymary btn-lg" id="search-button"
                                     onclick="searchUniversities()">
                                     <i class="fas fa-search" style="margin-right: 0.5rem;"></i>
                                     Search
@@ -97,7 +97,7 @@
                     <!-- Results Header -->
                     <div class="mb-4">
                         <h2 class="text-xl font-semibold text-gray-900" id="results-count">
-                            Found 4 Universities
+                            
                         </h2>
                         <p class="text-gray-600">Showing results for international students</p>
                     </div>
@@ -118,11 +118,11 @@
     </div>
 
     <!-- University Modal -->
-    <div id="university-modal" class="modal-overlay hidden" onclick="closeModal(event)">
+    <div id="university-modal" class="modal-overlay hidden" onclick="closeUniversityModal(event)">
         <div class="modal-content" onclick="event.stopPropagation()">
             <div class="modal-header">
                 <h2 class="modal-title" id="modal-title">University Name</h2>
-                <button onclick="closeModal()"
+                <button onclick="closeUniversityModal()"
                     style="background: none; border: none; font-size: 1.5rem; cursor: pointer;">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"

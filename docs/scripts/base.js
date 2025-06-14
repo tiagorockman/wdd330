@@ -17,35 +17,7 @@ function createElement(tag, className = '', innerHTML = '') {
   return element;
 }
 
-//deletar
-function showPage(pageId) {
-  // Hide all pages
-  $$('.page').forEach(page => page.style.display = 'none');
-  
-  // Show selected page
-  const targetPage = $(`#${pageId}`);
-  if (targetPage) {
-    targetPage.style.display = 'block';
-    appState.currentPage = pageId;
-  }
-}
 
-// Navigation functions
-function navigateToSearch(query = '') {
-  appState.searchQuery = query;
-  showPage('main-page');
-  initializeMainPage();
-}
-
-function navigateToLogin() {
-  showPage('login-page');
-  initializeLoginPage();
-}
-
-function navigateToHome() {
-  showPage('index-page');
-  initializeIndexPage();
-}
 
 // Index page functionality
 // function initializeIndexPage() {
@@ -99,15 +71,6 @@ function initializeLoginPage() {
     backToHomeButton.addEventListener('click', navigateToHome);
   }
 }
-
-// Main page functionality
-function initializeMainPage() {
-  setupSearchFunctionality();
-  setupFilters();
-  renderUniversities();
-  updateResultsCount();
-}
-
 
 
 // Theme toggle functionality
@@ -244,5 +207,17 @@ function showFormError(fieldId, message) {
 function findUniversities(){
   const searchValue = document.getElementById("home-search");
   localStorage.setItem("searchValue", searchValue.value);
-  window.location.href = "pages/search.html";
+  navigateToSearch();
+}
+
+function navigateToHome(){
+  window.location.href = "../index.html";
+}
+
+function navigateToLogin(){
+   location.href = "../pages/login.html";
+}
+
+function navigateToSearch(){
+   window.location.href = "../pages/search.html";
 }

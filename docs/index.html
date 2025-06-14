@@ -12,12 +12,12 @@
     <!-- Navigation -->
     <nav class="navbar">
         <div class="navbar-content">
-            <a href="#" class="navbar-brand" onclick="navigateTo('home')">
+            <a href="#" class="navbar-brand" onclick="navigateToHome()">
                 <i class="fas fa-graduation-cap"></i>
                 <span>UniFinder</span>
             </a>
             <div class="flex items-center space-x-4">
-                <button class="btn btn-primary" onclick="navigateTo('login')">
+                <button class="btn btn-primary" onclick="navigateToLogin()">
                     Sign In
                 </button>
             </div>
@@ -81,72 +81,4 @@
         </div>
     </div>
 
-    <!-- Login Page -->
-    <div id="login-page" class="page hidden">
-        <div class="login-container">
-            <!-- Logo Header -->
-            <div style="position: absolute; top: 1.5rem; left: 1.5rem;">
-                <a href="#" class="navbar-brand" onclick="navigateTo('home')">
-                    <i class="fas fa-graduation-cap"></i>
-                    <span>UniFinder</span>
-                </a>
-            </div>
-
-            <div class="login-card">
-                <div class="login-header">
-                    <h2 class="text-2xl font-bold text-gray-900 mb-2">Welcome Back</h2>
-                    <p class="text-gray-600">Sign in to continue your university search</p>
-                </div>
-                
-                <div class="login-content space-y-6">
-                    <form onsubmit="handleLogin(event)" class="space-y-4">
-                        <div class="form-group">
-                            <label class="form-label">Email Address</label>
-                            <input type="email" placeholder="Enter your email" class="input" required />
-                        </div>
-                        
-                        <div class="form-group">
-                            <label class="form-label">Password</label>
-                            <input type="password" placeholder="Enter your password" class="input" required />
-                        </div>
-                        
-                        <button type="submit" class="btn btn-primary w-full" style="height: 2.75rem;">
-                            Sign In
-                        </button>
-                    </form>
-                    
-                    <div class="text-center">
-                        <a href="#" class="text-sm text-blue-600">Forgot your password?</a>
-                    </div>
-                    
-                    <div class="separator">
-                        <span>or</span>
-                    </div>
-                    
-                    <button onclick="navigateTo('search')" class="btn btn-outline w-full" style="height: 2.75rem;">
-                        <i class="fas fa-envelope" style="margin-right: 0.5rem;"></i>
-                        Continue with Google
-                    </button>
-                    
-                    <div class="text-center text-sm text-gray-600">
-                        Don't have an account? 
-                        <a href="#" class="text-blue-600 font-semibold">Sign up here</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-
-    <!-- 404 Page -->
-    <div id="not-found-page" class="page hidden">
-        <div class="min-h-screen flex items-center justify-center bg-gray-100">
-            <div class="text-center">
-                <h1 class="text-4xl font-bold mb-4">404</h1>
-                <p class="text-xl text-gray-600 mb-4">Oops! Page not found</p>
-                <a href="#" onclick="navigateTo('home')" class="text-blue-600 hover:text-blue-800">Return to Home</a>
-            </div>
-        </div>
-    </div>
 </body>
