@@ -7,7 +7,7 @@ const PORT = process.env.PORT || 3000;
 
 app.use(cors());
 
-var queryBase = "SELECT c.*,d.mpowerfinance, d.CPT FROM colleges c LEFT JOIN college_domains d ON c.objectid = d.objectid";
+var queryBase = "SELECT c.*,d.mpowerfinance, d.CPT, d.URank, d.Tuition_and_fees FROM colleges c LEFT JOIN college_domains d ON c.objectid = d.objectid";
 
 // Lista tudo
 app.get('/api/colleges', (req, res) => {
