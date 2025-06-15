@@ -30,6 +30,19 @@ app.get('/api/colleges/search', (req, res) => {
   );
 });
 
+
+// Busca por nome (query: ?name=xxx)
+app.get('/api/collegedomain', (req, res) => {
+  const name = req.query.name || '';
+  db.all(
+   `Select * from college_domains`, [],
+    (err, rows) => {
+      if (err) return res.status(500).json({ error: err.message });
+      res.json(rows);
+    }
+  );
+});
+
 app.listen(PORT, () => {
   console.log(`API online: http://localhost:${PORT}`);
 });

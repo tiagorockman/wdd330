@@ -126,19 +126,23 @@ db.serialize(() => {
   CREATE TABLE college_domains(
       objectid VARCHAR(255),
       mpowerfinance TINYINT DEFAULT 0,
-      CPT TINYINT DEFAULT 0
+      CPT TINYINT DEFAULT 0,
+      URank int DEFAULT NULL,
+      Tuition_and_fees varchar(20) DEFAULT NULL
       )`
     );
 
     stmt = db.prepare(`
-      INSERT INTO college_domains VALUES (?,?,?)
+      INSERT INTO college_domains VALUES (?,?,?,?,?)
       `);
 
   datadomain.forEach((d) =>{
       stmt.run([
         d.objectid,
         d.mpowerfinance,
-        d.CPT
+        d.CPT,
+        d.URank,
+        d.Tuition_and_fees
       ])
   });
 
