@@ -1,7 +1,7 @@
 // Mock data for universities
 var universities = [];
-//const Url = "https://college-api-wxz6.onrender.com/api";
-const Url = "http://localhost:3000/api";
+const Url = "https://college-api-wxz6.onrender.com/api";
+//const Url = "http://localhost:3000/api";
 //  [
 //   {
 //     id: 1,
