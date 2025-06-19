@@ -211,13 +211,16 @@ function findUniversities(){
 }
 
 function navigateToHome(){
-  window.location.href = "../index.html";
+   const basePath = window.location.pathname.split('/').includes('wdd330') ? '/wdd330' : '';
+  window.location.href = `${basePath}/index.html`;
 }
 
 function navigateToLogin(){
-   location.href = "../pages/login.html";
+   const basePath = window.location.pathname.split('/').includes('wdd330') ? '/wdd330' : '';
+    location.href = `${basePath}/pages/login.html`;
 }
 
 function navigateToSearch(){
-   window.location.href = "../pages/search.html";
+  const basePath = window.location.pathname.split('/').includes('wdd330') ? '/wdd330' : '';
+   window.location.href = `${basePath}/pages/search.html`;
 }
