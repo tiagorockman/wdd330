@@ -70,12 +70,11 @@ app.get('/api/colleges/filter', (req, res) => {
     conditions.push(`(
       c.name LIKE ? OR 
       c.city LIKE ? OR 
-      c.state LIKE ? OR
-      c.programs LIKE ?
+      c.state LIKE ? 
     )`);
     const searchTerm = `%${query.trim()}%`;
       console.log("searchTerm", searchTerm);
-    params.push(searchTerm, searchTerm, searchTerm, searchTerm);
+    params.push(searchTerm, searchTerm, searchTerm);
   }
 
   // State filter

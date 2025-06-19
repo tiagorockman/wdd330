@@ -191,8 +191,9 @@ async function performSearch() {
       const query = appState.searchQuery.toLowerCase();
       filtered = filtered.filter(uni => 
         uni.name.toLowerCase().includes(query) ||
-        uni.location.toLowerCase().includes(query) ||
-        uni.programs.some(program => program.toLowerCase().includes(query))
+        uni.city.toLowerCase().includes(query) ||
+        uni.state.toLowerCase().includes(query) 
+        //uni.programs.some(program => program.toLowerCase().includes(query))
       );
     }
 
