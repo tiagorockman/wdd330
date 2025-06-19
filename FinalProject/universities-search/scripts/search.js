@@ -362,15 +362,8 @@ function capitalizeFirst(string){
 function createUniversityCard(university) {
   const card = createElement('div', 'bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-200');
   
-  const fee = university.Tuition_and_fees != null ? 
-                                                    new Intl.NumberFormat('en-US', {
-                                                        style: 'currency',
-                                                        currency: 'USD',
-                                                        minimumFractionDigits: 0,
-                                                        maximumFractionDigits: 0
-                                                      }).format(university.Tuition_and_fees)
-                                                  :
-                                                  "No information";
+  
+  const fee = getAnualTuition(university.Tuition_and_fees);
 
 
   card.innerHTML = `
@@ -442,6 +435,20 @@ function createUniversityCard(university) {
   return card;
 }
 
+function getAnualTuition(tuition){
+ var result = "No information";
+        
+  if(tuition != null) {
+    result = new Intl.NumberFormat('en-US', {
+                    style: 'currency',
+                    currency: 'USD',
+                    minimumFractionDigits: 0,
+                    maximumFractionDigits: 0
+                  }).format(tuition);
+  }
+  return result;
+}
+
 function updateResultsCount() {
   const countElement = document.querySelector('#results-count');
   if (countElement) {
@@ -449,9 +456,13 @@ function updateResultsCount() {
   }
 }
 
+async function searchUniversities(){
+  await performSearch();
+}
+
 // Modal functionality
 function openUniversityModal(universityId) {
-  const university = universities.find(u => u.id === universityId);
+  const university = universities.find(u=>u.objectid == universityId);
   if (!university) return;
 
   appState.selectedUniversity = university;
@@ -485,9 +496,11 @@ function closeUniversityModal() {
 function populateModalContent(university) {
   const modalTitle = document.querySelector('#modal-title');
   const modalContent = document.querySelector('#modal-body');
+  const fee = getAnualTuition(university.Tuition_and_fees);
+
   
   if (modalTitle) {
-    modalTitle.textContent = university.name;
+    modalTitle.textContent = capitalizeFirst(university.name);
   }
   
   if (modalContent) {
@@ -501,14 +514,14 @@ function populateModalContent(university) {
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"></path>
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"></path>
               </svg>
-              <span>${university.location}</span>
+              <span>${capitalizeFirst(university.city)},${university.state}</span>
             </div>
             
             <div class="flex flex-wrap gap-2">
-              <span class="px-2 py-1 bg-gray-100 text-gray-800 text-sm rounded">${university.type}</span>
-              <span class="px-2 py-1 bg-blue-100 text-blue-800 text-sm rounded">Ranking #${university.ranking}</span>
-              ${university.cpt_day_one ? '<span class="px-2 py-1 bg-green-100 text-green-800 text-sm rounded">CPT Day 1 Available</span>' : ''}
-              ${university.mpower_eligible ? '<span class="px-2 py-1 bg-purple-100 text-purple-800 text-sm rounded">MPOWER Eligible</span>' : ''}
+              <span class="px-2 py-1 bg-gray-100 text-gray-800 text-sm rounded">${university.type == 2? "Private" : university.type == 1 ? "Public" : "Community College"}</span>
+              <span class="px-2 py-1 bg-blue-100 text-blue-800 text-sm rounded">Ranking #${university.URank ?? 0}</span>
+              ${university.CPT ? '<span class="px-2 py-1 bg-green-100 text-green-800 text-sm rounded">CPT Day 1 Available</span>' : ''}
+              ${university.mpowerfinance ? '<span class="px-2 py-1 bg-purple-100 text-purple-800 text-sm rounded">MPOWER Eligible</span>' : ''}
             </div>
           </div>
           
@@ -517,15 +530,15 @@ function populateModalContent(university) {
             <div class="space-y-2">
               <div class="flex justify-between">
                 <span class="text-gray-600">Annual Tuition:</span>
-                <span class="font-semibold">${university.tuition}</span>
+                <span class="font-semibold">${fee}</span>
               </div>
               <div class="flex justify-between">
                 <span class="text-gray-600">Acceptance Rate:</span>
-                <span class="font-semibold">${university.acceptance_rate}</span>
+                <span class="font-semibold">${university.acceptance_rate ?? 0}</span>
               </div>
               <div class="flex justify-between">
                 <span class="text-gray-600">Programs Available:</span>
-                <span class="font-semibold">${university.programs.length}+</span>
+                <span class="font-semibold">${university.programs?.length ?? 0}+</span>
               </div>
             </div>
           </div>
@@ -538,19 +551,19 @@ function populateModalContent(university) {
           <h4 class="font-semibold text-gray-900 mb-4 text-lg">International Student Benefits</h4>
           <div class="grid md-grid-cols-2 gap-4">
             <div class="flex items-center space-x-3">
-              ${university.cpt_day_one ? 
+              ${university.CPT ? 
                 '<svg class="h-5 w-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>' :
                 '<svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>'
               }
-              <span class="${university.cpt_day_one ? 'text-gray-900' : 'text-gray-500'}">CPT from Day One</span>
+              <span class="${university.CPT ? 'text-gray-900' : 'text-gray-500'}">CPT from Day One</span>
             </div>
             
             <div class="flex items-center space-x-3">
-              ${university.mpower_eligible ? 
+              ${university.mpowerfinance ? 
                 '<svg class="h-5 w-5 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>' :
                 '<svg class="h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>'
               }
-              <span class="${university.mpower_eligible ? 'text-gray-900' : 'text-gray-500'}">MPOWER Financing</span>
+              <span class="${university.mpowerfinance ? 'text-gray-900' : 'text-gray-500'}">MPOWER Financing</span>
             </div>
             
             <div class="flex items-center space-x-3">
@@ -571,10 +584,25 @@ function populateModalContent(university) {
         <div>
           <h4 class="font-semibold text-gray-900 mb-4 text-lg">Popular Programs</h4>
           <div class="flex flex-wrap gap-2">
-            ${university.programs.map(program => `<span class="px-3 py-1 border border-gray-300 text-gray-700 text-sm rounded">${program}</span>`).join('')}
+           <!-- ${university.programs?.map(program => `<span class="px-3 py-1 border border-gray-300 text-gray-700 text-sm rounded">${program}</span>`).join('')}  -->
           </div>
         </div>
         
+        <hr class="border-gray-200">
+
+       <!-- University Location -->
+        <div>
+          <h4 class="font-semibold text-gray-900 mb-4 text-lg">University Location</h4>
+          <div class="flex flex-wrap gap-2">
+            <div id="map">
+            <div class="loading">
+                <div class="spinner"></div>
+                Loading Google Maps...
+            </div>
+        </div>
+          </div>
+        </div>
+
         <hr class="border-gray-200">
         
         <!-- Action Buttons -->
@@ -592,4 +620,86 @@ function populateModalContent(university) {
       </div>
     `;
   }
+
+  LoadMapInfo(university);
+}
+
+function LoadMapInfo(university){
+  let map;
+   let marker;        
+
+    try {
+        // Create map centered on your coordinates
+        map = new google.maps.Map(document.getElementById('map'), {
+            center: { lat: university.latitude, lng: university.longitude },
+            zoom: 15,
+            mapTypeId: google.maps.MapTypeId.ROADMAP,
+            styles: [
+                {
+                    featureType: 'all',
+                    elementType: 'geometry.fill',
+                    stylers: [{ weight: '2.00' }]
+                },
+                {
+                    featureType: 'all',
+                    elementType: 'geometry.stroke',
+                    stylers: [{ color: '#9c9c9c' }]
+                },
+                {
+                    featureType: 'all',
+                    elementType: 'labels.text',
+                    stylers: [{ visibility: 'on' }]
+                }
+            ]
+        });
+        
+        // Create marker at your location
+        marker = new google.maps.Marker({
+            position: { lat: university.latitude, lng: university.longitude },
+            map: map,
+            title: 'Your Location',
+            animation: google.maps.Animation.DROP,
+            icon: {
+                url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`
+                    <svg width="40" height="40" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="20" cy="20" r="18" fill="#667eea" stroke="white" stroke-width="4"/>
+                        <circle cx="20" cy="20" r="8" fill="white"/>
+                    </svg>
+                `),
+                scaledSize: new google.maps.Size(40, 40),
+                anchor: new google.maps.Point(20, 20)
+            }
+        });
+        
+        // Create info window
+        const infoWindow = new google.maps.InfoWindow({
+            content: `
+                <div class="map-popup" style="min-width: 200px;">
+                    <h3 style="margin: 0 0 10px 0; color: #333;">${university.name}</h3>
+                    <p style="margin: 5px 0; color: #666;"><strong>Location:</strong> ${capitalizeFirst(university.city)},${university.state}</p>
+                    <p style="margin: 5px 0; color: #666;"><strong>Type:</strong> ${university.type == 2? "Private" : university.type == 1 ? "Public" : "Community College"}</p>
+                    <p style="margin: 5px 0; color: #666;"><strong>Tuition:</strong> ${university.Tuition_and_fees}</p>
+                    <p style="margin: 5px 0; color: #666;"><strong>Programs:</strong> ${university.programs ? university.programs?.join(', ') : ""}</p>
+                </div>
+            `
+        });
+        
+        // Show info window when marker is clicked
+        marker.addListener('click', () => {
+            infoWindow.open(map, marker);
+        });
+        
+        // Auto-open info window after a short delay
+        setTimeout(() => {
+            infoWindow.open(map, marker);
+        }, 1000);
+        
+    } catch (error) {
+        console.error('Error initializing map:', error);
+        document.getElementById('map').innerHTML = `
+            <div class="error">
+                <strong>Error loading map:</strong> ${error.message} 
+            </div>
+        `;
+    }
 }

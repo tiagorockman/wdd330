@@ -85,7 +85,7 @@
                             <div class="flex gap-4">
                                 <input type="text" placeholder="Search universities, programs, or locations..."
                                     class="input input-lg flex-1" id="search-input"
-                                    onkeypress="handleEnterKey(event, searchUniversities)" />
+                                    onkeypress="handleEnterKey(event, await searchUniversities)" />
                                 <button class="btn btn-prihandleEnterKeymary btn-lg" id="search-button"
                                     onclick="searchUniversities()">
                                     <i class="fas fa-search" style="margin-right: 0.5rem;"></i>
@@ -142,4 +142,8 @@
             </div>
         </div>
     </div>
+
+    <script async defer 
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBoPZ1e6HlL8K3i7NYGmQztKYVMlHve2o4&callback=LoadMapInfo">
+    </script>
 </body>
