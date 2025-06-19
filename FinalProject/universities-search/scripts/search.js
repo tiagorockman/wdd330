@@ -1,7 +1,7 @@
 // Mock data for universities
 var universities = [];
-const Url = "https://college-api-wxz6.onrender.com/api";
-//const Url = "http://localhost:3000/api";
+//const Url = "https://college-api-wxz6.onrender.com/api";
+const Url = "http://localhost:3000/api";
 //  [
 //   {
 //     id: 1,
@@ -113,9 +113,9 @@ function setupSearchFunctionality() {
 
   if (searchInput) {
     searchInput.value = appState.searchQuery;
-    searchInput.addEventListener('keypress', (e) => {
+    searchInput.addEventListener('keypress', async (e) => {
       if (e.key === 'Enter') {
-        performSearch();
+        await performSearch();
       }
     });
   }
@@ -137,30 +137,30 @@ function setupFilters() {
   const applyFiltersButton = document.querySelector('#apply-filters-button');
 
   if (typeSelect) {
-    typeSelect.addEventListener('change', (e) => {
+    typeSelect.addEventListener('change', async (e) => {
       appState.filters.type = e.target.value;
-      performSearch();
+      await performSearch();
     });
   }
 
   if (tuitionSelect) {
-    tuitionSelect.addEventListener('change', (e) => {
+    tuitionSelect.addEventListener('change', async (e) => {
       appState.filters.tuitionRange = e.target.value;
-      performSearch();
+     await performSearch();
     });
   }
 
   if (cptCheckbox) {
-    cptCheckbox.addEventListener('change', (e) => {
+    cptCheckbox.addEventListener('change', async (e) => {
       appState.filters.cptDayOne = e.target.checked;
-      performSearch();
+      await performSearch();
     });
   }
 
   if (mpowerCheckbox) {
-    mpowerCheckbox.addEventListener('change', (e) => {
+    mpowerCheckbox.addEventListener('change', async (e) => {
       appState.filters.mpowerEligible = e.target.checked;
-      performSearch();
+     await performSearch();
     });
   }
 
@@ -176,64 +176,159 @@ function createElement(tag, className = '', innerHTML = '') {
   return element;
 }
 
-function performSearch() {
+async function performSearch() {
   const searchInput = document.querySelector('#search-input');
   if (searchInput) {
     appState.searchQuery = searchInput.value;
   }
 
-  let filtered = [...universities];
+  // First try local filtering if you have universities data loaded
+  if (universities && universities.length > 0) {
+    let filtered = [...universities];
 
-  // Apply search query filter
-  if (appState.searchQuery.trim()) {
-    const query = appState.searchQuery.toLowerCase();
-    filtered = filtered.filter(uni => 
-      uni.name.toLowerCase().includes(query) ||
-      uni.location.toLowerCase().includes(query) ||
-      uni.programs.some(program => program.toLowerCase().includes(query))
-    );
+    // Apply search query filter
+    if (appState.searchQuery.trim()) {
+      const query = appState.searchQuery.toLowerCase();
+      filtered = filtered.filter(uni => 
+        uni.name.toLowerCase().includes(query) ||
+        uni.location.toLowerCase().includes(query) ||
+        uni.programs.some(program => program.toLowerCase().includes(query))
+      );
+    }
+
+    // Apply type filter
+    if (appState.filters.type && appState.filters.type !== 'all') {
+      filtered = filtered.filter(uni => uni.type === appState.filters.type);
+    }
+
+    // Apply tuition range filter
+    if (appState.filters.tuitionRange && appState.filters.tuitionRange !== 'any') {
+      filtered = filtered.filter(uni => {
+        const tuition = parseInt(uni.Tuition_and_fees?.replace(/[^0-9]/g, ''));
+        switch (appState.filters.tuitionRange) {
+          case 'under30k':
+            return tuition < 30000;
+          case '30k-50k':
+            return tuition >= 30000 && tuition <= 50000;
+          case 'over50k':
+            return tuition > 50000;
+          default:
+            return true;
+        }
+      });
+    }
+
+    // Apply CPT Day One filter
+    if (appState.filters.cptDayOne) {
+      filtered = filtered.filter(uni => uni.cpt_day_one);
+    }
+
+    // Apply MPOWER filter
+    if (appState.filters.mpowerEligible) {
+      filtered = filtered.filter(uni => uni.mpower_eligible);
+    }
+
+    // Apply ranking filter
+    if (appState.filters.ranking && appState.filters.ranking !== 'any') {
+      filtered = filtered.filter(uni => {
+        const rank = parseInt(uni.ranking);
+        switch (appState.filters.ranking) {
+          case 'top50':
+            return rank <= 50;
+          case 'top100':
+            return rank <= 100;
+          case 'top200':
+            return rank <= 200;
+          case 'ranked':
+            return !isNaN(rank);
+          default:
+            return true;
+        }
+      });
+    }
+
+    // If we have enough results locally, use them
+    if (filtered.length >= 10) {
+      appState.filteredUniversities = filtered;
+      renderUniversities();
+      updateResultsCount();
+      return;
+    }
   }
 
-  // Apply type filter
-  if (appState.filters.type && appState.filters.type !== 'all') {
-    filtered = filtered.filter(uni => uni.type === appState.filters.type);
+  // If we don't have enough local results or no local data, search backend
+  try {
+    await searchWithFilters();
+  } catch (error) {
+    console.error('Backend search failed, using local results:', error);
+    // Fallback to local results even if less than 10
+    if (universities && universities.length > 0) {
+      // Use the filtered results from above
+      renderUniversities();
+      updateResultsCount();
+    }
   }
-
-  // Apply tuition range filter
-  if (appState.filters.tuitionRange && appState.filters.tuitionRange !== 'any') {
-    filtered = filtered.filter(uni => {
-      const tuition = parseInt(uni.tuition.replace(/[^0-9]/g, ''));
-      switch (appState.filters.tuitionRange) {
-        case 'under30k':
-          return tuition < 30000;
-        case '30k-50k':
-          return tuition >= 30000 && tuition <= 50000;
-        case 'over50k':
-          return tuition > 50000;
-        default:
-          return true;
-      }
-    });
-  }
-
-  // Apply CPT Day One filter
-  if (appState.filters.cptDayOne) {
-    filtered = filtered.filter(uni => uni.cpt_day_one);
-  }
-
-  // Apply MPOWER filter
-  if (appState.filters.mpowerEligible) {
-    filtered = filtered.filter(uni => uni.mpower_eligible);
-  }
-
-  appState.filteredUniversities = filtered;
-  renderUniversities();
-  updateResultsCount();
 }
 
-function searchUniversities(){
-  performSearch();
+async function searchWithFilters() {
+  try {
+    // Prepare query parameters
+    const params = new URLSearchParams();
+    
+    // Add search query if exists
+    if (appState.searchQuery && appState.searchQuery.trim()) {
+      params.append('query', appState.searchQuery.trim());
+    }
+    
+    // Add filters
+    if (appState.filters.state && appState.filters.state !== 'all') {
+      params.append('state', appState.filters.state);
+    }
+    
+    if (appState.filters.type && appState.filters.type !== 'all') {
+      params.append('type', appState.filters.type);
+    }
+    
+    if (appState.filters.tuitionRange && appState.filters.tuitionRange !== 'any') {
+      params.append('tuitionRange', appState.filters.tuitionRange);
+    }
+    
+    if (appState.filters.cptDayOne) {
+      params.append('cptDayOne', 'true');
+    }
+    
+    if (appState.filters.mpowerEligible) {
+      params.append('mpowerEligible', 'true');
+    }
+    
+    if (appState.filters.ranking && appState.filters.ranking !== 'any') {
+      params.append('ranking', appState.filters.ranking);
+    }
+    
+    // Make API call
+    const response = await fetch(`${Url}/colleges/filter?${params.toString()}`);
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    
+    const data = await response.json();
+    
+    // Update app state with results from backend
+    universities = data;
+    appState.filteredUniversities = [...universities];
+    
+    // Re-render the UI
+    renderUniversities();
+    updateResultsCount();
+    
+  } catch (error) {
+    console.error('Error searching with filters:', error);
+    // Optionally show user-friendly error message
+    alert('Failed to search universities. Please try again.');
+  }
 }
+
 
 function renderUniversities() {
   const container = document.querySelector('#universities-container');
@@ -266,6 +361,17 @@ function capitalizeFirst(string){
 function createUniversityCard(university) {
   const card = createElement('div', 'bg-white rounded-lg shadow-md border border-gray-200 hover:shadow-lg transition-shadow duration-200');
   
+  const fee = university.Tuition_and_fees != null ? 
+                                                    new Intl.NumberFormat('en-US', {
+                                                        style: 'currency',
+                                                        currency: 'USD',
+                                                        minimumFractionDigits: 0,
+                                                        maximumFractionDigits: 0
+                                                      }).format(university.Tuition_and_fees)
+                                                  :
+                                                  "No information";
+
+
   card.innerHTML = `
     <div class="p-6">
       <div class="flex items-start justify-between mb-4">
@@ -286,7 +392,7 @@ function createUniversityCard(university) {
       </div>
       
       <div class="flex flex-wrap gap-4 mb-4">
-        <span class="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded">${university.type == 2? "Private" : "Public"}</span>
+        <span class="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded">${university.type == 2? "Private" : university.type == 1 ? "Public" : "Community College"}</span>
         ${university.CPT == null || university.CPT == 0 ?  '' : '<span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded">CPT Day 1</span>'}
         ${university.mpowerfinance == null || university.mpowerfinance == 0 ? '' : '<span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded">MPOWER</span>'}
       </div>
@@ -299,9 +405,9 @@ function createUniversityCard(university) {
             </svg>
             <span class="text-sm">Tuition</span>
           </div>
-          <span class="font-semibold text-gray-900">${university.Tuition_and_fees ?? "No information"}</span>
+          <span class="font-semibold text-gray-900">${ fee }</span>
         </div>
-        
+
         <div class="flex items-center justify-between gap-2">
           <div class="flex items-center text-gray-600 ">
             <svg class="h-4 w-4 mr-1 .gap-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
