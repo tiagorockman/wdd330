@@ -1,62 +1,10 @@
-// Mock data for universities
-var universities = [];
+
 const Url = "https://college-api-wxz6.onrender.com/api";
 //const Url = "http://localhost:3000/api";
-//  [
-//   {
-//     id: 1,
-//     name: "University of Southern California",
-//     location: "Los Angeles, CA",
-//     tuition: "$63,468/year",
-//     ranking: 25,
-//     type: "Private",
-//     acceptance_rate: "11%",
-//     cpt_day_one: true,
-//     mpower_eligible: true,
-//     image: "https://images.unsplash.com/photo-1498050108023-c5249f4df085",
-//     programs: ["Computer Science", "Business", "Engineering", "Medicine", "Film"]
-//   },
-//   {
-//     id: 2,
-//     name: "Arizona State University",
-//     location: "Tempe, AZ",
-//     tuition: "$31,200/year",
-//     ranking: 117,
-//     type: "Public",
-//     acceptance_rate: "88%",
-//     cpt_day_one: true,
-//     mpower_eligible: false,
-//     image: "https://images.unsplash.com/photo-1519389950473-47ba0277781c",
-//     programs: ["Business", "Engineering", "Computer Science", "Psychology"]
-//   },
-//   {
-//     id: 3,
-//     name: "Northeastern University",
-//     location: "Boston, MA",
-//     tuition: "$59,100/year",
-//     ranking: 49,
-//     type: "Private",
-//     acceptance_rate: "18%",
-//     cpt_day_one: true,
-//     mpower_eligible: true,
-//     image: "https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d",
-//     programs: ["Computer Science", "Business", "Engineering", "Health Sciences"]
-//   },
-//   {
-//     id: 4,
-//     name: "University of Illinois Chicago",
-//     location: "Chicago, IL",
-//     tuition: "$35,000/year",
-//     ranking: 82,
-//     type: "Public",
-//     acceptance_rate: "79%",
-//     cpt_day_one: false,
-//     mpower_eligible: true,
-//     image: "https://images.unsplash.com/photo-1461749280684-dccba630e2f6",
-//     programs: ["Medicine", "Engineering", "Business", "Public Health"]
-//   }
-// ];
 
+
+// data for universities
+var universities = [];
 // Application state
 let appState = {
   searchQuery: '',
@@ -73,22 +21,71 @@ let appState = {
   user: null
 };
 
-window.onload = () =>{
-  initializeSearchPage();
-}
+
+document.addEventListener('DOMContentLoaded', () => {
+    console.log('Page loaded, initializing secure map...');
+    initializeSecureMap();
+    initializeSearchPage();
+});
 
 
 async function initializeSearchPage() {
   initialLodaData();
+}
 
+async function initializeSecureMap() {
+    try {
+      showSpinner();
+        console.log('Fetching secure map configuration...');
+        
+        // Call your secure backend endpoint
+        const response = await fetch(`${Url}/get-api-link`);
+        
+        if (!response.ok) {
+            throw new Error(`Server error: ${response.status} ${response.statusText}`);
+        }
+        
+        const data = await response.json();
+        
+        if (data.error) {
+            throw new Error(data.error);
+        }
+        
+        console.log('Got secure map URL from backend');
+        
+        // Dynamically load Google Maps script
+        const script = document.createElement('script');
+        script.src = data.mapUrl;
+        script.async = true;
+        script.defer = true;
+        
+        // Handle successful loading
+        script.onload = () => {
+            console.log('Google Maps script loaded successfully');
+        };
+        
+        // Handle loading errors
+        script.onerror = () => {
+            throw new Error('Failed to load Google Maps script');
+        };
+        
+        // Add script to page
+        document.head.appendChild(script);
+        
+    } catch (error) {
+        console.error('Error loading secure map:', error);
+        showError(`Failed to load map: ${error.message}`);
+    }
 }
 
 function initialLodaData(){
     const path = `${Url}/colleges`;
     
+    showSpinner();
     fetch(path).then(response=> {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
+        hideSpinner();
       }
       return response.json();
     })
@@ -99,6 +96,7 @@ function initialLodaData(){
         setupFilters();
         renderUniversities();
         updateResultsCount();
+        hideSpinner();
     })
     .catch(error => {
         throw new Error(`Could not load ${path}`)
@@ -630,7 +628,8 @@ function LoadMapInfo(university){
 
     try {
         // Create map centered on your coordinates
-        map = new google.maps.Map(document.getElementById('map'), {
+        if(university != undefined || university?.latitude != null){
+          map = new google.maps.Map(document.getElementById('map'), {
             center: { lat: university.latitude, lng: university.longitude },
             zoom: 15,
             mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -693,6 +692,8 @@ function LoadMapInfo(university){
         setTimeout(() => {
             infoWindow.open(map, marker);
         }, 1000);
+
+      }
         
     } catch (error) {
         console.error('Error initializing map:', error);
@@ -702,4 +703,16 @@ function LoadMapInfo(university){
             </div>
         `;
     }
+}
+
+function showSpinner(){
+  const spinner = document.getElementById("spinner-data");
+  spinner.classList.remove('hidden');
+  spinner.classList.add('flex');
+}
+
+function hideSpinner(){
+  const spinner = document.getElementById("spinner-data");
+  spinner.classList.remove('flex');
+  spinner.classList.add('hidden');
 }
