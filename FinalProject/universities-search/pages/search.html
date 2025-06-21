@@ -7,8 +7,10 @@
     <title>UniFinder - Find Your Perfect US University</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link rel="stylesheet" href="../styles/base.css">
+    <link rel="stylesheet" href="../styles/cookie.css">
     <script src="../scripts/base.js"></script>
     <script src="../scripts/search.js"></script>
+    <script src="../scripts/cookie.js"></script>
 </head>
 
 <body>
@@ -149,5 +151,121 @@
                 <!-- Modal content will be populated here -->
             </div>
         </div>
+    </div>
+
+    <!-- Cookie Consent Banner -->
+    <div id="cookieBanner" class="cookie-banner">
+        <div class="cookie-banner-content">
+            <div class="cookie-banner-main">
+                <div class="cookie-icon">
+                    🍪
+                </div>
+                <div class="cookie-content">
+                    <div class="cookie-title">We use cookies</div>
+                    <div class="cookie-text">
+                        We use cookies and similar technologies to enhance your browsing experience, 
+                        analyze site traffic, and personalize content. By clicking "Accept All", 
+                        you consent to our use of cookies. You can manage your preferences or 
+                        learn more in our <a href="#" style="color: #3b82f6; text-decoration: underline;">Cookie Policy</a>.
+                    </div>
+                    <div class="cookie-actions">
+                        <button class="cookie-btn cookie-btn-primary" onclick="acceptAllCookies()">
+                            ✓ Accept All
+                        </button>
+                        <button class="cookie-btn cookie-btn-secondary" onclick="acceptNecessaryCookies()">
+                            Accept Necessary Only
+                        </button>
+                        <button class="cookie-btn cookie-btn-outline" onclick="showCookieSettings()">
+                            ⚙️ Customize
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Cookie Settings Modal -->
+    <div id="cookieModal" class="cookie-modal-overlay">
+        <div class="cookie-modal">
+            <div class="cookie-modal-header">
+                <h2 class="cookie-modal-title">Cookie Preferences</h2>
+                <button class="cookie-modal-close" onclick="closeCookieSettings()">×</button>
+            </div>
+            <div class="cookie-modal-content">
+                <p style="color: #6b7280; margin-bottom: 1.5rem;">
+                    Manage your cookie preferences below. You can enable or disable different types 
+                    of cookies. Note that disabling some cookies may affect your experience on our website.
+                </p>
+
+                <div class="cookie-category">
+                    <div class="cookie-category-header">
+                        <div class="cookie-category-title">🔒 Strictly Necessary</div>
+                        <label class="cookie-toggle">
+                            <input type="checkbox" checked disabled>
+                            <span class="cookie-toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="cookie-category-desc">
+                        These cookies are essential for the website to function properly. 
+                        They cannot be disabled as they are necessary for core functionality.
+                    </div>
+                </div>
+
+                <div class="cookie-category">
+                    <div class="cookie-category-header">
+                        <div class="cookie-category-title">📊 Analytics</div>
+                        <label class="cookie-toggle">
+                            <input type="checkbox" id="analytics-toggle">
+                            <span class="cookie-toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="cookie-category-desc">
+                        These cookies help us understand how visitors interact with our website 
+                        by collecting anonymous information about usage patterns.
+                    </div>
+                </div>
+
+                <div class="cookie-category">
+                    <div class="cookie-category-header">
+                        <div class="cookie-category-title">🎯 Marketing</div>
+                        <label class="cookie-toggle">
+                            <input type="checkbox" id="marketing-toggle">
+                            <span class="cookie-toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="cookie-category-desc">
+                        These cookies are used to deliver personalized advertisements and 
+                        track the effectiveness of our advertising campaigns.
+                    </div>
+                </div>
+
+                <div class="cookie-category">
+                    <div class="cookie-category-header">
+                        <div class="cookie-category-title">✨ Functional</div>
+                        <label class="cookie-toggle">
+                            <input type="checkbox" id="functional-toggle">
+                            <span class="cookie-toggle-slider"></span>
+                        </label>
+                    </div>
+                    <div class="cookie-category-desc">
+                        These cookies enable enhanced functionality and personalization, 
+                        such as remembering your preferences and settings.
+                    </div>
+                </div>
+            </div>
+            <div class="cookie-modal-footer">
+                <button class="cookie-btn cookie-btn-outline" onclick="rejectAllCookies()">
+                    Reject All
+                </button>
+                <button class="cookie-btn cookie-btn-primary" onclick="savePreferences()">
+                    Save Preferences
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Status Indicator -->
+    <div id="cookieStatus" class="cookie-status hidden">
+        <span id="statusText">Consent status: Not set</span>
     </div>
 </body>

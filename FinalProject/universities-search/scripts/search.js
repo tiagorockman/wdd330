@@ -1,6 +1,6 @@
 
-//const Url = "https://college-api-wxz6.onrender.com/api";
-const Url = "http://localhost:3000/api";
+const Url = "https://college-api-wxz6.onrender.com/api";
+//const Url = "http://localhost:3000/api";
 
 
 // data for universities
@@ -21,13 +21,11 @@ let appState = {
   user: null
 };
 
-window.onload = () =>{
-  initializeSearchPage();
-}
 
 document.addEventListener('DOMContentLoaded', () => {
     console.log('Page loaded, initializing secure map...');
     initializeSecureMap();
+    initializeSearchPage();
 });
 
 
