@@ -1,13 +1,29 @@
 import express from 'express';
 import cors from 'cors';
 import db from './db.js';
+import dotenv from 'dotenv';
+
+
+//configuring to use environment variables
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+
 app.use(cors());
 
 var queryBase = "SELECT c.*,d.mpowerfinance, d.CPT, d.URank, d.Tuition_and_fees FROM colleges c LEFT JOIN college_domains d ON c.objectid = d.objectid";
+
+
+app.get('/api/get-api-link', (req, res) => {
+  if(!process.env.GOOGLE_MAPS_API_KEY){
+    return res.status(500).json({
+      error: 'Google Maps API key not configured'
+    })
+  }
+    res.json({ 'mapUrl': `https://maps.googleapis.com/maps/api/js?key=${process.env.GOOGLE_MAPS_API_KEY}&callback=LoadMapInfo`});
+});
 
 // Lista tudo
 app.get('/api/colleges', (req, res) => {

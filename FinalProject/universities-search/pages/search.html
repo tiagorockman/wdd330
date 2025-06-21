@@ -23,6 +23,9 @@
                 <button class="btn btn-primary" onclick="navigateToLogin()">
                     Sign In
                 </button>
+                <button id="theme-toggle" class="btn btn-outline">
+                    <i class="fas fa-adjust"></i> Toggle Theme
+                </button>
             </div>
         </div>
     </nav>
@@ -108,6 +111,11 @@
                         <!-- Universities will be populated here -->
                     </div>
 
+                     <div id="spinner-data" class="spinner-container hidden">
+                        <div class="spinner spinner-lg"></div>
+                        <div class="loading-text">Loading...</div>
+                    </div>
+
                     <!-- No Results -->
                     <div id="no-results" class="text-center py-12 hidden">
                         <p class="text-xl text-gray-500 mb-2">No universities found</p>
@@ -142,8 +150,4 @@
             </div>
         </div>
     </div>
-
-    <script async defer 
-        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBoPZ1e6HlL8K3i7NYGmQztKYVMlHve2o4&callback=LoadMapInfo">
-    </script>
 </body>

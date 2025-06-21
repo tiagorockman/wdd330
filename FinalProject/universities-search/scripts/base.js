@@ -19,31 +19,6 @@ function createElement(tag, className = '', innerHTML = '') {
 
 
 
-// Index page functionality
-// function initializeIndexPage() {
-//   const searchInput = $('#index-search-input');
-//   const searchButton = $('#index-search-button');
-//   const signInButton = $('#index-signin-button');
-
-//   if (searchInput) {
-//     searchInput.addEventListener('keypress', (e) => {
-//       if (e.key === 'Enter') {
-//         navigateToSearch(searchInput.value);
-//       }
-//     });
-//   }
-
-//   if (searchButton) {
-//     searchButton.addEventListener('click', () => {
-//       navigateToSearch(searchInput ? searchInput.value : '');
-//     });
-//   }
-
-//   if (signInButton) {
-//     signInButton.addEventListener('click', navigateToLogin);
-//   }
-// }
-
 // Login page functionality
 function initializeLoginPage() {
   const loginForm = $('#login-form');
@@ -142,16 +117,6 @@ function initializeApp() {
   
   // Set up global event listeners
   setupGlobalEventListeners();
-  
-  // Initialize the current page
-  const currentPage = window.location.hash.slice(1) || 'index';
-  showPage(currentPage + '-page');
-  
-  // Handle browser back/forward
-  window.addEventListener('popstate', (e) => {
-    const page = window.location.hash.slice(1) || 'index';
-    showPage(page + '-page');
-  });
 }
 
 function setupGlobalEventListeners() {
@@ -179,7 +144,7 @@ function setupGlobalEventListeners() {
   });
   
   // Theme toggle button
-  const themeToggle = $('#theme-toggle');
+  const themeToggle = document.getElementById('theme-toggle');
   if (themeToggle) {
     themeToggle.addEventListener('click', toggleTheme);
   }
